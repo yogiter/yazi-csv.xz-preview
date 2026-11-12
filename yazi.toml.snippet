@@ -1,0 +1,21 @@
+# 放到 Rocky 机器的 ~/.config/yazi/yazi.toml
+# 若文件里已有 [plugin] / prepend_previewers，把规则合并进去，不要重复定义。
+
+[plugin]
+# 表格化预览（推荐）：纯文本 + xz/gz/bz2 压缩 CSV
+prepend_previewers = [
+	{ url = "*.{csv,tsv}", run = "csv" },
+	{ url = "*.{csv.xz,csv.gz,csv.bz2,tsv.xz,tsv.gz,tsv.bz2}", run = "csv" },
+]
+
+# 仅最小修复（不装插件、不支持压缩文件）：
+# prepend_previewers = [
+# 	{ url = "*.{csv,tsv,psv}", run = "code" },
+# ]
+# 注意：code 预览器直接读原始字节，遇到 .csv.xz 只会显示二进制乱码。
+# 需要预览压缩 CSV 必须用上面的 csv 插件。
+
+# 说明：
+# - .csv.xz 的 MIME 是 application/x-xz，默认会被 archive 预览器接管；
+#   prepend_previewers 排在默认规则之前，用 url 匹配可抢先按表格渲染。
+# - 插件放 ~/.config/yazi/plugins/csv.yazi/main.lua，run = "csv" 即自动调用。
